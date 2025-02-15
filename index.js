@@ -5,6 +5,10 @@
 
 //dependencies
 const http = require('http');
+const url = require('url');
+const { StringDecoder } = require('string_decoder');
+const { buffer } = require('stream/consumers');
+const {handleReqRes} = require('./helpers/handleReqRes');
 
 //app object - module scaffolding
 const app = {};
@@ -15,18 +19,15 @@ app.config = {
 };
 
 //crate server
- app.createServer = () =>{
+app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
-    server.listen(app.config.port, ()=>{
+    server.listen(app.config.port, () => {
         console.log(`Server is running on port ${app.config.port}`);
     });
- }
+}
 
- //handle request res
- app.handleReqRes = (req, res) =>{
-    //response hendle
-    res.end("Hello World");
- }
+//handle request res
+app.handleReqRes = handleReqRes;
 
- //start the server
- app.createServer();
+//start the server
+app.createServer();
