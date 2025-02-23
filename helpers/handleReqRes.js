@@ -3,6 +3,8 @@
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const { buffer } = require('stream/consumers');
+const routes = require('./../routes');
+const { notFoundleHandler} = require('../handlers/routeHandlers/notFoundHandler')
 //module scaffolding
 const handler = {};
 
@@ -18,8 +20,29 @@ handler.handleReqRes = (req, res) => {
     const queryStringObject = parsedUrl.query;
     const headersObject = req.headers;
 
+    const requestProperties = {
+        parsedUrl, 
+        path,
+        trimmedPath,
+        method,
+        queryStringObject,
+        headersObject,
+    };
+
     const decoder = new StringDecoder('utf-8');
     let realData = '';
+    const choseHandler = routes[trimmedPath] ? routes[trimmedPath] : notFoundleHandler;
+
+    choseHandler(requestProperties, (statusCode, payload) =>{
+        statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
+        payload = typeof(payload) === 'object' ? payload : {};
+
+        const payloadString = JSON.stringify(payload);
+
+        //return the response
+        res.writeHead(statusCode);
+        res.end(payloadString);
+    })
     req.on('data', (buffer) => {
         realData += decoder.write(buffer);
     });
