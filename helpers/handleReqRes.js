@@ -1,4 +1,8 @@
 
+//dependencies
+const url = require('url');
+const { StringDecoder } = require('string_decoder');
+const { buffer } = require('stream/consumers');
 //module scaffolding
 const handler = {};
 
