@@ -1,8 +1,8 @@
 //module scaffolding
 const handler = {};
 
-handler.sampleHandler = ()=>{
-    console.log("sample");
+handler.notFoundleHandler = ()=>{
+    console.log("Route Not Found");
 }
 
 module.exports = handler;
