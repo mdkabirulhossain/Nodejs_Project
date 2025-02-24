@@ -1,0 +1,22 @@
+//Handle all environment related things
+
+//module scaffolding
+
+const environment = {};
+
+environment.staging = {
+    port: 3000,
+    envName: 'staging'
+};
+environment.production = {
+    port: 5000,
+    envName: 'production'
+};
+
+//determine which environment was passed
+const currentEnvironment = typeof(process.env.Node_ENV) === 'string' ? process.env.Node_ENV : 'staging';
+
+//export correspending environment object
+const environmentExport = typeof(environment[currentEnvironment]) === 'object' ? environment[currentEnvironment] : environment.staging;
+
+module.exports = environmentExport;
