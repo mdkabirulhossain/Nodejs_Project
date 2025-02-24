@@ -10,3 +10,6 @@ Project Name: <strong>Uptime Monitoring API</strong> </br>
 5. Set links & Up/Down </br>
 6. Edit / Delete link & rate limit </br>
 7. Check up/down time </br>
+8. Use Environment Variable </br>
+9. Data Storage In File System </br>
+10. CRUD System with fs module
