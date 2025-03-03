@@ -14,7 +14,7 @@ environment.production = {
 };
 
 //determine which environment was passed
-const currentEnvironment = typeof(process.env.Node_ENV) === 'string' ? process.env.Node_ENV : 'staging';
+const currentEnvironment = typeof(process.env.NODE_ENV) === 'string' ? process.env.NODE_ENV : 'staging';
 
 //export correspending environment object
 const environmentExport = typeof(environment[currentEnvironment]) === 'object' ? environment[currentEnvironment] : environment.staging;
