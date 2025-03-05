@@ -43,3 +43,6 @@
 // It provides various inbuilt functions for collections, arrays, manipulated objects, and other utility methods that we can use directly instead 
 // of writing them from scratch. It makes it easier to iterate over the arrays, strings as well as objects. Its modular methods make the creation 
 // of composite functions easier.
+
+//airbnb style guide
+ 
