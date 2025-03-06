@@ -44,6 +44,3 @@
 // of composite functions easier.
 
 //airbnb style guide
-
-console.log("Hi");
-console.log("Hello");

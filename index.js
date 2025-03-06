@@ -4,28 +4,24 @@
 // Date: 15.02.25
 
 //dependencies
-const http = require('http');
-const {handleReqRes} = require('./helpers/handleReqRes');
-const environment = require('./helpers/environment');
+const http = require("http");
+const { handleReqRes } = require("./helpers/handleReqRes");
+const environment = require("./helpers/environment");
 //app object - module scaffolding
 const app = {};
 
 // configuration
 
-
 //crate server
 app.createServer = () => {
-    const server = http.createServer(app.handleReqRes);
-    server.listen(environment.port, () => {
-        console.log(`Server is running on port ${environment.port}`);
-    });
-}
+  const server = http.createServer(app.handleReqRes);
+  server.listen(environment.port, () => {
+    console.log(`Server is running on port ${environment.port}`);
+  });
+};
 
 //handle request res
 app.handleReqRes = handleReqRes;
 
 //start the server
 app.createServer();
-
-console.log("hello")
-           console.log("Hi")
