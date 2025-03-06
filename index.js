@@ -26,3 +26,6 @@ app.handleReqRes = handleReqRes;
 
 //start the server
 app.createServer();
+
+console.log("hello")
+           console.log("Hi")
