@@ -7,10 +7,15 @@
 const http = require("http");
 const { handleReqRes } = require("./helpers/handleReqRes");
 const environment = require("./helpers/environment");
+const data = require("./lib/data");
+
 //app object - module scaffolding
 const app = {};
 
-// configuration
+//testing file system
+data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
+  console.log(`error was`, err);
+} )
 
 //crate server
 app.createServer = () => {
