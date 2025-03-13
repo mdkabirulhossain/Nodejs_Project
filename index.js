@@ -13,15 +13,20 @@ const data = require("./lib/data");
 const app = {};
 
 // testing write data to file
-data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
-  console.log(`error was`, err);
-})
+// data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
+//   console.log(`error was`, err);
+// })
 
 //test read data from file
 // data.read('test', 'newFile', function(err, data){
 //   console.log(`error was`, err);
 //   console.log(`Data`, data);
 // })
+
+//test update data
+data.update('test', 'newFile', {name: 'UK', language: 'English'}, function(err){
+  console.log(`error was`, err);
+})
 
 
 
