@@ -13,9 +13,17 @@ const data = require("./lib/data");
 const app = {};
 
 //testing file system
-data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
-  console.log(`error was`, err);
-} )
+// data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
+//   console.log(`error was`, err);
+// })
+
+//test read from file
+// data.read('test', 'newFile', function(err, data){
+//   console.log(`error was`, err);
+//   console.log(`Data`, data);
+// })
+
+
 
 //crate server
 app.createServer = () => {
