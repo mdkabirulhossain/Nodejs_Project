@@ -12,12 +12,12 @@ const data = require("./lib/data");
 //app object - module scaffolding
 const app = {};
 
-//testing file system
-// data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
-//   console.log(`error was`, err);
-// })
+// testing write data to file
+data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
+  console.log(`error was`, err);
+})
 
-//test read from file
+//test read data from file
 // data.read('test', 'newFile', function(err, data){
 //   console.log(`error was`, err);
 //   console.log(`Data`, data);
