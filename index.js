@@ -12,7 +12,7 @@ const data = require("./lib/data");
 //app object - module scaffolding
 const app = {};
 
-// testing write data to file
+//testing write data to file
 // data.create('test', 'newFile', {name: 'Bangladesh', language: 'Bangla'}, function(err){
 //   console.log(`error was`, err);
 // })
@@ -23,11 +23,15 @@ const app = {};
 //   console.log(`Data`, data);
 // })
 
-//test update data
-data.update('test', 'newFile', {name: 'UK', language: 'English'}, function(err){
-  console.log(`error was`, err);
-})
+//test update file data
+// data.update('test', 'newFile', {name: 'UK', language: 'English'}, function(err){
+//   console.log(`error was`, err);
+// })
 
+// test delete file
+data.delete('test', 'newFile',function(err){
+    console.log(`error was`, err);
+  })
 
 
 //crate server
