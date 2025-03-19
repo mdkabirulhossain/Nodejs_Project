@@ -17,10 +17,10 @@ handler.userHandler = (requestProperties, callback) => {
 handler._users = {};
 
 handler._users.post = (requestProperties, callback) => {
-  const firsName =
-    typeof requestProperties.body.firsName === "string" &&
-    requestProperties.body.firsName.trim().length > 0
-      ? requestProperties.body.firsName
+  const firstName =
+    typeof requestProperties.body.firstName === "string" &&
+    requestProperties.body.firstName.trim().length > 0
+      ? requestProperties.body.firstName
       : false;
 
   const lastName =
@@ -47,19 +47,27 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.tarmAgreement
       : false;
 
-    if(firsName, lastName, phone, password, tarmAgreement){
+    if(firstName&& lastName && phone && password && tarmAgreement){ 
         //make sure that the user does not already exist
         data.read('users', phone, (err, user)=>{
             if(err){
                 let userObject = {
-                    firsName,
+                    firstName,
                     lastName,
                     phone,
                     password: hash(password),
                     tarmAgreement,
                 };
                 //store user to db
-
+                data.create('users', phone, userObject, (err)=>{
+                    if(!err){
+                        callback(200, {
+                            message: 'User is created successfully',
+                        })
+                    }else{
+                        callback(500, {'error': 'could not create user!'});
+                    }
+                })
             }else{
                 callback(500, {
                     error: 'There was a problem in server side!',

@@ -20,7 +20,7 @@ utilities.parseJSON = (jsonString) =>{
 utilities.hash = (str) =>{
     if(typeof str === 'string' && str.length > 0){
         const hash = crypto
-        .createHmac('sha256', environment[process.env.NODE_ENV].secretKey)
+        .createHmac('sha256', environment.secretKey)
         .update('If you love node so much why you do not learn always')
         .digest('hex');
         return hash;
