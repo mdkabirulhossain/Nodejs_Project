@@ -1,20 +1,32 @@
-//dependencies
-const data = require('../../lib/data');
-const{hash} = require('../../helpers//utilities');
+// Dependencies
+const data = require("../../lib/data");
+const { hash } = require("../../helpers/utilities");
 
-//Module scaffolding
-const handler = {};
+// Module scaffolding
+const handler = {}; // ✅ Define handler first
 
+// Define _users before calling it
+handler._users = {};
+
+// Main handler function
 handler.userHandler = (requestProperties, callback) => {
   const acceptedMethods = ["get", "post", "put", "delete"];
-  if (acceptedMethods.indexOf(requestProperties.method) > -1) {
-    handler._users[requestProperties.method](requestProperties, callback);
+  
+  // Convert method to lowercase
+  const method = requestProperties.method.toLowerCase();
+
+  if (acceptedMethods.includes(method)) {
+    if (typeof handler._users[method] === "function") {
+      handler._users[method](requestProperties, callback);
+    } else {
+      callback(405, { error: "Method not implemented!" });
+    }
   } else {
-    callback(405);
+    callback(405, { error: "Method not allowed!" });
   }
 };
 
-handler._users = {};
+// ✅ Define all CRUD methods
 
 handler._users.post = (requestProperties, callback) => {
   const firstName =
@@ -41,50 +53,52 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.password
       : false;
 
-  const tarmAgreement =
-    typeof requestProperties.body.tarmAgreement === "boolean" &&
-    requestProperties.body.tarmAgreement.trim().length > 0
-      ? requestProperties.body.tarmAgreement
-      : false;
+  const termAgreement =
+      typeof requestProperties.body.termAgreement === "boolean"
+        ? requestProperties.body.termAgreement
+        : false;
+    
 
-    if(firstName&& lastName && phone && password && tarmAgreement){ 
-        //make sure that the user does not already exist
-        data.read('users', phone, (err, user)=>{
-            if(err){
-                let userObject = {
-                    firstName,
-                    lastName,
-                    phone,
-                    password: hash(password),
-                    tarmAgreement,
-                };
-                //store user to db
-                data.create('users', phone, userObject, (err)=>{
-                    if(!err){
-                        callback(200, {
-                            message: 'User is created successfully',
-                        })
-                    }else{
-                        callback(500, {'error': 'could not create user!'});
-                    }
-                })
-            }else{
-                callback(500, {
-                    error: 'There was a problem in server side!',
-                })
-            }
-        })
+  if (firstName && lastName && phone && password && termAgreement) {
+    // Make sure user does not already exist
+    data.read("users", phone, (err, user) => {
+      if (err) {
+        let userObject = {
+          firstName,
+          lastName,
+          phone,
+          password: hash(password),
+          termAgreement,
+        };
 
-    } else{
-        callback(400, {
-            error: 'You have a problem in your request',
+        // Store user in DB
+        data.create("users", phone, userObject, (err) => {
+          if (!err) {
+            callback(200, { message: "User is created successfully" });
+          } else {
+            callback(500, { error: "Could not create user!" });
+          }
         });
-    }
+      } else {
+        callback(500, { error: "User already exists!" });
+      }
+    });
+  } else {
+    callback(400, { error: "Invalid input data" });
+  }
 };
-handler._users.get = (requestProperties, callback) => {
-  callback(200);
-};
-handler._users.put = (requestProperties, callback) => {};
-handler._users.delete = (requestProperties, callback) => {};
 
+handler._users.get = (requestProperties, callback) => {
+  callback(200, { message: "GET method is working!" });
+};
+
+handler._users.put = (requestProperties, callback) => {
+  callback(200, { message: "PUT method is working!" });
+};
+
+handler._users.delete = (requestProperties, callback) => {
+  callback(200, { message: "DELETE method is working!" });
+};
+
+// Export module
 module.exports = handler;

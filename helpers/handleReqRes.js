@@ -1,85 +1,17 @@
+// Dependencies
+const url = require("url");
+const { StringDecoder } = require("string_decoder");
+const routes = require("../routes");
+const { notFoundleHandler } = require("../handlers/routeHandlers/notFoundHandler");
+const { parseJSON } = require("../helpers/utilities");
 
-// //dependencies
-// const url = require('url');
-// const { StringDecoder } = require('string_decoder');
-// const { buffer } = require('stream/consumers');
-// const routes = require('./../routes');
-// const { notFoundleHandler} = require('../handlers/routeHandlers/notFoundHandler');
-// const {parseJSON} = require('../helpers/utilities');
-
-// //module scaffolding
-// const handler = {};
-
-// handler.handleReqRes = (req, res) => {
-//     //handle req
-//     const parsedUrl = url.parse(req.url, true);
-//     // console.log(parsedUrl);
-//     const path = parsedUrl.pathname;
-//     //Use regular expression for remove unwanted slash
-//     const trimmedPath = path.replace(/^\/|\/$/g, '');
-//     // console.log(trimmedPath);
-//     const method = req.method.toLowerCase();
-//     const queryStringObject = parsedUrl.query;
-//     const headersObject = req.headers;
-
-//     const requestProperties = {
-//         parsedUrl, 
-//         path,
-//         trimmedPath,
-//         method,
-//         queryStringObject,
-//         headersObject,
-//     };
-
-//     const decoder = new StringDecoder('utf-8');
-//     let realData = '';
-//     const choseHandler = routes[trimmedPath] ? routes[trimmedPath] : notFoundleHandler;
-
-    
-//     req.on('data', (buffer) => {
-//         realData += decoder.write(buffer);
-//     });
-
-//     req.on('end', () => {
-//         realData += decoder.end();
-
-//         requestProperties.body = parseJSON(realData);
-        
-//         choseHandler(requestProperties, (statusCode, payload) =>{
-//             statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
-//             payload = typeof(payload) === 'object' ? payload : {};
-    
-//             const payloadString = JSON.stringify(payload);
-    
-//             //return the response
-//             res.writeHead(statusCode);
-//             res.end(payloadString);
-//         })
-      
-
-//     });
-
-
-// }
-
-// module.exports = handler;
-
-// ############               updated handleReqRes
-
-// dependencies
-const url = require('url');
-const { StringDecoder } = require('string_decoder');
-const routes = require('./../routes');
-const { notFoundleHandler } = require('../handlers/routeHandlers/notFoundHandler');
-const { parseJSON } = require('../helpers/utilities');
-
-// module scaffolding
+// Module scaffolding
 const handler = {};
 
 handler.handleReqRes = (req, res) => {
-    // parse request
+    // Parse request
     const parsedUrl = url.parse(req.url, true);
-    const path = parsedUrl.pathname.replace(/^\/|\/$/g, ''); // remove unwanted slashes
+    const path = parsedUrl.pathname.replace(/^\/+|\/+$/g, ""); // Remove leading/trailing slashes
     const method = req.method.toLowerCase();
     const queryStringObject = parsedUrl.query;
     const headersObject = req.headers;
@@ -90,39 +22,37 @@ handler.handleReqRes = (req, res) => {
         method,
         queryStringObject,
         headersObject,
+        body: {}, // ✅ Default to empty object
     };
 
-    const decoder = new StringDecoder('utf-8');
-    let realData = '';
+    const decoder = new StringDecoder("utf-8");
+    let realData = "";
 
-    // handle request data
-    req.on('data', (buffer) => {
+    // Handle request data
+    req.on("data", (buffer) => {
         realData += decoder.write(buffer);
     });
 
-    req.on('end', () => {
+    req.on("end", () => {
         realData += decoder.end();
 
+        // ✅ Ensure JSON parsing is safe
         try {
-            requestProperties.body = JSON.parse(realData); // ✅ Proper JSON parsing
+            requestProperties.body = JSON.parse(realData);
         } catch (error) {
-            console.error("❌ JSON Parsing Error:", error.message); // Log error
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: "Invalid JSON format" }));
+            console.error("❌ Invalid JSON received:", realData);
+            requestProperties.body = {}; // Default to empty object
         }
 
-        // choose handler
+        // Choose handler
         const chosenHandler = routes[path] ? routes[path] : notFoundleHandler;
 
-        chosenHandler(requestProperties, (statusCode, payload) => {
-            statusCode = typeof statusCode === 'number' ? statusCode : 500;
-            payload = typeof payload === 'object' ? payload : {};
+        chosenHandler(requestProperties, (statusCode = 500, payload = {}) => {
+            const responsePayload = JSON.stringify(payload);
 
-            const payloadString = JSON.stringify(payload);
-
-            // return response
-            res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-            res.end(payloadString);
+            // Return response
+            res.writeHead(statusCode, { "Content-Type": "application/json" });
+            res.end(responsePayload);
         });
     });
 };
