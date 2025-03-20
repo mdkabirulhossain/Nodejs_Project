@@ -40,7 +40,7 @@ handler.handleReqRes = (req, res) => {
         try {
             requestProperties.body = JSON.parse(realData);
         } catch (error) {
-            console.error("❌ Invalid JSON received:", realData);
+            console.error("Invalid JSON received:", realData);
             requestProperties.body = {}; // Default to empty object
         }
 
