@@ -1,6 +1,8 @@
 // Dependencies
 const data = require("../../lib/data");
 const { hash } = require("../../helpers/utilities");
+const { parseJSON } = require("../../helpers/utilities");
+
 
 // Module scaffolding
 const handler = {}; // ✅ Define handler first
@@ -92,9 +94,33 @@ handler._users.get = (requestProperties, callback) => {
   const phone =
     typeof requestProperties.queryStringObject.phone === "string" &&
     requestProperties.queryStringObject.phone.trim().length === 11
-      ? requestProperties.queryStringObject.phone
+      ? requestProperties.queryStringObject.phone.trim()
       : false;
+
+  if (phone) {
+    // Lookup the user
+    data.read("users", phone, (err, u) => {
+      if (!err && u) {
+        try {
+          const user = JSON.parse(u); // Ensure JSON parsing works properly
+          if (user && typeof user === "object") {
+            delete user.password; // Remove password before sending response
+            callback(200, user);
+          } else {
+            callback(500, { error: "User data is corrupted!" });
+          }
+        } catch (error) {
+          callback(500, { error: "Failed to parse user data!" });
+        }
+      } else {
+        callback(404, { error: "Requested user was not found!" });
+      }
+    });
+  } else {
+    callback(400, { error: "Invalid phone number format!" });
+  }
 };
+
 
 handler._users.put = (requestProperties, callback) => {
   callback(200, { message: "PUT method is working!" });
