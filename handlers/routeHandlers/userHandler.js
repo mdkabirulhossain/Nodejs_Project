@@ -56,16 +56,14 @@ handler._users.post = (requestProperties, callback) => {
       : false;
 
   const termAgreement =
-      typeof requestProperties.body.termAgreement === "boolean"
-        ? requestProperties.body.termAgreement
-        : false;
-    
+    typeof requestProperties.body.termAgreement === "boolean"
+      ? requestProperties.body.termAgreement
+      : false;
 
   if (firstName && lastName && phone && password && termAgreement) {
-    // Make sure user does not already exist
     data.read("users", phone, (err, user) => {
       if (err) {
-        let userObject = {
+        const userObject = {
           firstName,
           lastName,
           phone,
@@ -73,7 +71,6 @@ handler._users.post = (requestProperties, callback) => {
           termAgreement,
         };
 
-        // Store user in DB
         data.create("users", phone, userObject, (err) => {
           if (!err) {
             callback(200, { message: "User is created successfully" });
@@ -89,6 +86,7 @@ handler._users.post = (requestProperties, callback) => {
     callback(400, { error: "Invalid input data" });
   }
 };
+
 
 handler._users.get = (requestProperties, callback) => {
   const phone =
@@ -123,8 +121,73 @@ handler._users.get = (requestProperties, callback) => {
 
 
 handler._users.put = (requestProperties, callback) => {
-  callback(200, { message: "PUT method is working!" });
+  const phone =
+    typeof requestProperties.body.phone === "string" &&
+    requestProperties.body.phone.trim().length === 11
+      ? requestProperties.body.phone.trim()
+      : false;
+
+  const firstName =
+    typeof requestProperties.body.firstName === "string" &&
+    requestProperties.body.firstName.trim().length > 0
+      ? requestProperties.body.firstName.trim()
+      : false;
+
+  const lastName =
+    typeof requestProperties.body.lastName === "string" &&
+    requestProperties.body.lastName.trim().length > 0
+      ? requestProperties.body.lastName.trim()
+      : false;
+
+  const password =
+    typeof requestProperties.body.password === "string" &&
+    requestProperties.body.password.trim().length > 0
+      ? requestProperties.body.password.trim()
+      : false;
+
+  if (phone) {
+    if (firstName || lastName || password) {
+      // Read the existing user
+      data.read("users", phone, (err, userData) => {
+        if (!err && userData) {
+          // Parse the userData (if stored as string JSON)
+          const userObject = { ...userData };
+
+          if (firstName) userObject.firstName = firstName;
+          if (lastName) userObject.lastName = lastName;
+          if (password) userObject.password = hash(password);
+
+          // Update the user data
+          data.update("users", phone, userObject, (err) => {
+            if (!err) {
+              callback(200, {
+                message: "User was updated successfully!",
+              });
+            } else {
+              callback(500, {
+                error: "Server error while updating the user.",
+              });
+            }
+          });
+        } else {
+          callback(404, {
+            error: "User not found!",
+          });
+        }
+      });
+    } else {
+      callback(400, {
+        error: "You must provide at least one field to update (firstName, lastName, or password).",
+      });
+    }
+  } else {
+    callback(400, {
+      error: "Invalid phone number provided.",
+    });
+  }
 };
+
+
 
 handler._users.delete = (requestProperties, callback) => {
   callback(200, { message: "DELETE method is working!" });
