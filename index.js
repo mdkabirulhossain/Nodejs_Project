@@ -99,13 +99,56 @@ const fs = require('fs');
 
 
 //##############  fs ready file ready html page ##################
+// const server = http.createServer((req, res)=>{
+//   if(req.url == '/'){
+//     fs.readFile('Home.html', (err, data)=>{
+//       res.writeHead(200, {'content-type': 'text/html'});
+//       res.write(data);
+//       res.end();
+//     })
+    
+//   }
+// })
+// server.listen(3000);
+// console.log("Server is running...........");
+
+
+// // Write File
+// //ASyncronous Way
+// const server = http.createServer((req, res)=>{
+//   if(req.url == '/'){
+//     fs.writeFile('write.txt', "Hi, How are you?", (err)=>{
+//       if(!err){
+//         res.writeHead(200, {"content-type": "text/html"});
+//         res.write("Write File SuccessFully");
+//         res.end();
+//       }else{
+//         res.writeHead(200, {"content-type": "text/html"});
+//         res.write("Write File Fail");
+//         res.end();
+//       }
+//     })
+    
+//   }
+// })
+// server.listen(3000);
+// console.log("Server is running...........");
+
+// Write File
+//Syncronous Way
 const server = http.createServer((req, res)=>{
   if(req.url == '/'){
-    fs.readFile('Home.html', (err, data)=>{
-      res.writeHead(200, {'content-type': 'text/html'});
-      res.write(data);
-      res.end();
-    })
+    let error = fs.writeFileSync('write1.txt', "Hi, How are you?");
+      if(!error){
+        res.writeHead(200, {"content-type": "text/html"});
+        res.write("Write File SuccessFully");
+        res.end();
+      }else{
+        res.writeHead(200, {"content-type": "text/html"});
+        res.write("Write File Fail");
+        res.end();
+      }
+    
     
   }
 })
