@@ -74,3 +74,11 @@ console.log("Server is running...........");
 //Response Data comes from server 2 way through HEAD or BODY
 //Head data comes pair waise key and value
 //Body data type normally JSON
+// When we write something in search bar that is called request(req) and then what we see in the browser it's called response(res)
+
+//What is HTTP Client
+//Ans: Those send HTTP Request in server and Recive response that is called HTTP Client.
+//Example of HTTP Client
+// Axios, Fetch, Jquery Ajax etc
+//HTTP client for Testing
+// Postman, Fiddler
