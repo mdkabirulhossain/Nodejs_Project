@@ -5,6 +5,7 @@
 
 // //dependencies
 const http = require("http");
+const URL = require("url");
 // const { handleReqRes } = require("./helpers/handleReqRes");
 // const environment = require("./helpers/environment");
 // const data = require("./lib/data");
@@ -82,3 +83,6 @@ console.log("Server is running...........");
 // Axios, Fetch, Jquery Ajax etc
 //HTTP client for Testing
 // Postman, Fiddler
+
+// ##########   URL Module    ##########
+// Using URL Module breakdown the url using parse then we will get hostname, pathname, searchQuery, port etc
