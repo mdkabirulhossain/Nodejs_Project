@@ -6,6 +6,7 @@
 // //dependencies
 const http = require("http");
 const URL = require("url");
+const fs = require('fs');
 // const { handleReqRes } = require("./helpers/handleReqRes");
 // const environment = require("./helpers/environment");
 // const data = require("./lib/data");
@@ -50,25 +51,25 @@ const URL = require("url");
 // app.createServer();
 // *****************************New Follow Rabbil Bhai Tutorial *************
 
-const server = http.createServer((req, res)=>{
-  if(req.url == '/'){
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<h1>This is the Home Page</h1>');
-    res.end();
-  }
-  if(req.url == '/about'){
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<h1>This is the about Page</h1>');
-    res.end();
-  }
-  if(req.url == '/contact'){
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<h1>This is the contact Page</h1>');
-    res.end();
-  }
-})
-server.listen(3000);
-console.log("Server is running...........");
+// const server = http.createServer((req, res)=>{
+//   if(req.url == '/'){
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.write('<h1>This is the Home Page</h1>');
+//     res.end();
+//   }
+//   if(req.url == '/about'){
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.write('<h1>This is the about Page</h1>');
+//     res.end();
+//   }
+//   if(req.url == '/contact'){
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.write('<h1>This is the contact Page</h1>');
+//     res.end();
+//   }
+// })
+// server.listen(3000);
+// console.log("Server is running...........");
 
 //Http Protocol Request Response
 //Req methods POST, GET, PUT, DELETE etc
@@ -86,3 +87,27 @@ console.log("Server is running...........");
 
 // ##########   URL Module    ##########
 // Using URL Module breakdown the url using parse then we will get hostname, pathname, searchQuery, port etc
+
+//##############  Synchronous & Asynchronous ################
+
+//When we use Synchronous
+// when need process time short and simple task then we will use Synchronous
+
+//When we use Asynchronous
+// when process time high and also process complex then we will use Asynchronous
+// We always try to use Asynchronous
+
+
+//##############  fs ready file ready html page ##################
+const server = http.createServer((req, res)=>{
+  if(req.url == '/'){
+    fs.readFile('Home.html', (err, data)=>{
+      res.writeHead(200, {'content-type': 'text/html'});
+      res.write(data);
+      res.end();
+    })
+    
+  }
+})
+server.listen(3000);
+console.log("Server is running...........");
