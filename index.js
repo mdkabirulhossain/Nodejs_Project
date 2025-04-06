@@ -115,6 +115,7 @@ const fs = require('fs');
 
 // // Write File
 // //ASyncronous Way
+// //In Asyncronous must pass a call back function
 // const server = http.createServer((req, res)=>{
 //   if(req.url == '/'){
 //     fs.writeFile('write.txt', "Hi, How are you?", (err)=>{
@@ -136,6 +137,7 @@ const fs = require('fs');
 
 // Write File
 //Syncronous Way
+// Syncronous not need to pass callback function
 const server = http.createServer((req, res)=>{
   if(req.url == '/'){
     let error = fs.writeFileSync('write1.txt', "Hi, How are you?");
